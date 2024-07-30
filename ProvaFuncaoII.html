@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Gorjetas e Troco</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input, select {
+            margin: 10px;
+            padding: 5px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Gorjetas e Troco</h1>
+    
+    <label for="valorCompra">Valor da Compra (R$):</label>
+    <input type="number" id="valorCompra" step="0.01" placeholder="Valor total da compra">
+    <br>
+    <label for="valorRecebido">Valor Recebido (R$):</label>
+    <input type="number" id="valorRecebido" step="0.01" placeholder="Valor recebido">
+    <br>
+    <label for="qualidadeServico">Qualidade do Serviço:</label>
+    <select id="qualidadeServico">
+        <option value="bom">Bom</option>
+        <option value="regular">Regular</option>
+        <option value="ruim">Ruim</option>
+    </select>
+    <br>
+    <button onclick="calcularGorjetaETroco()">Calcular</button>
+    <div id="resultado"></div>
+
+    <script>
+        const calcularGorjetaETroco = () => {
+            
+            const valorCompra = parseFloat(document.getElementById('valorCompra').value);
+            const valorRecebido = parseFloat(document.getElementById('valorRecebido').value);
+            const qualidadeServico = document.getElementById('qualidadeServico').value;
+
+            
+            if (isNaN(valorCompra) || valorCompra <= 0) {
+                document.getElementById('resultado').innerText = 'Por favor, insira um valor válido para a compra.';
+                return;
+            }
+
+            if (isNaN(valorRecebido) || valorRecebido < valorCompra) {
+                document.getElementById('resultado').innerText = 'O valor recebido deve ser maior ou igual ao valor da compra.';
+                return;
+            }
+
+            
+            const obterPorcentagem = (qualidade) => {
+                switch (qualidade) {
+                    case 'bom': return 0.20;
+                    case 'regular': return 0.15;
+                    case 'ruim': return 0.10;
+                    default: return 0;
+                }
+            };
+
+            
+            const porcentagem = obterPorcentagem(qualidadeServico);
+            const gorjeta = valorCompra * porcentagem;
+            const total = valorCompra + gorjeta;
+            const troco = valorRecebido - total;
+
+            
+            document.getElementById('resultado').innerText = 
+                `Gorjeta: R$ ${gorjeta.toFixed(2)}\n` +
+                `Total com Gorjeta: R$ ${total.toFixed(2)}\n` +
+                `Troco: R$ ${troco.toFixed(2)}`;
+        };
+    </script>
+</body>
+</html>
